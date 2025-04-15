@@ -9,7 +9,9 @@
     <div class="col">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
-          <h5 class="card-title text-primary">
+          <h5
+            class="card-title text-primary d-flex justify-content-between align-items-center"
+          >
             <a
               href="{% url 'mypage:review_edit' user.username review.id %}"
               class="text-decoration-none"
@@ -17,22 +19,42 @@
               {{ review.movie.title }}
             </a>
           </h5>
+
           <p class="card-text mb-2" style="white-space: pre-line">
             {{ review.content|truncatechars:100 }}
           </p>
+
           <div class="mb-2">
             <span class="badge bg-warning text-dark"
               >⭐ {{ review.score }}/5</span
             >
           </div>
         </div>
-        <div class="card-footer text-muted small">
-          작성일: {{ review.created_at|date:"Y년 m월 d일 H:i" }}
+
+        <div
+          class="card-footer d-flex justify-content-between align-items-center"
+        >
+          <small class="text-muted">
+            작성일: {{ review.created_at|date:"Y년 m월 d일 H:i" }}
+          </small>
+
+          <!-- 삭제 버튼 -->
+          <form
+            method="post"
+            action="{% url 'mypage:review_delete' user.username review.id %}"
+            onsubmit="return confirm('정말 삭제하시겠습니까?');"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              삭제
+            </button>
+          </form>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
+
   {% else %}
   <div class="alert alert-info text-center mt-4" role="alert">
     아직 작성한 리뷰가 없습니다.

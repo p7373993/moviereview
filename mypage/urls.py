@@ -11,4 +11,9 @@ urlpatterns = [
         views.review_edit,
         name="review_edit",
     ),
+    path(
+        "mypage/<str:username>/<int:review_id>/delete",
+        views.review_delete,
+        name="review_delete",
+    ),
 ]

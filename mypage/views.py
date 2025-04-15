@@ -41,3 +41,10 @@ def review_edit(request, username, review_id):
         "mypage/review_edit.html",
         {"form": form, "subject": review.movie.title, "review_id": review_id},
     )
+
+
+def review_delete(request, username, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if request.method == "POST":
+        review.delete()
+        return redirect("mypage:mypage", username=username)
