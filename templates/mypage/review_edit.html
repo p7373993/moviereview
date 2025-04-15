@@ -1,33 +1,54 @@
 {% extends "base.html" %} {% block content %}
-<div class="container my-3">
-  <form method="post" action="{% url 'mypage:review_edit' user.username review_id %}">
-    {% csrf_token %} {% include "form_errors.html" %}
-    <div class="mb-3">
-      <label for="subject" class="form-label">영화 제목</label>
-      <div id="subject">{{subject}}</div>
-    </div>
+<div class="container my-5">
+  <div class="card shadow-sm rounded p-4">
+    <h3 class="mb-4 text-center">🎬 리뷰 수정</h3>
+    <form
+      method="post"
+      action="{% url 'mypage:review_edit' user.username review_id %}"
+    >
+      {% csrf_token %} {% include "form_errors.html" %}
 
-    <div class="mb-3">
-      <label for="content" class="form-label"> 리뷰 내용</label>
-      <textarea name="content" id="content" class="form-control" rows="10">
-      {{form.content.value | default_if_none:""}}
-      </textarea>
-    </div>
-    <div class="mb-3">
-      <label for="score" class="form-label">평점 (0 ~ 5)</label>
-      <input
-        type="number"
-        name="score"
-        id="score"
-        class="form-control"
-        min="0"
-        max="5"
-        value="{{ form.score.value|default_if_none:'0' }}"
-      />
-    </div>
-    <div class="mb-3">
-      
-    <button type="submit" class="btn btn-primary">생성하기</button>
-  </form>
+      <!-- 영화 제목 -->
+      <div class="mb-4">
+        <label for="subject" class="form-label fw-bold">영화 제목</label>
+        <div id="subject" class="form-control bg-light">{{ subject }}</div>
+      </div>
+
+      <!-- 리뷰 내용 -->
+      <div class="mb-4">
+        <label for="content" class="form-label fw-bold">리뷰 내용</label>
+        <textarea
+          name="content"
+          id="content"
+          class="form-control"
+          rows="8"
+          placeholder="리뷰를 작성해주세요."
+        >
+{{ form.content.value|default_if_none:"" }}</textarea
+        >
+      </div>
+
+      <!-- 평점 -->
+      <div class="mb-4">
+        <label for="score" class="form-label fw-bold">평점 (0 ~ 5)</label>
+        <input
+          type="number"
+          name="score"
+          id="score"
+          class="form-control"
+          min="0"
+          max="5"
+          value="{{ form.score.value|default_if_none:'0' }}"
+        />
+      </div>
+
+      <!-- 버튼 -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+          💾 저장하기
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
