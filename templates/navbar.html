@@ -1,41 +1,51 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'mypage:index' %}">Watcha</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <!-- 로고 / 홈 -->
+    <a
+      class="navbar-brand fw-bold text-primary"
+      href="{% url 'mypage:index' %}"
+    >
+      🎬 Watcha
+    </a>
+
+    <!-- 모바일 메뉴 토글 -->
     <button
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          {% if user.is_authenticated %}
-          <a class="nav-link" href="{% url 'common:logout' %}"
-            >{{ user.username }} (로그아웃)</a
-          >
-          {% else %}
 
+    <!-- 메뉴 목록 -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+        <!-- 로그인 상태일 때 -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'mypage:mypage' user.username %}">
+            마이페이지
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-danger" href="{% url 'common:logout' %}">
+            {{ user.username }} (로그아웃)
+          </a>
+        </li>
+
+        {% else %}
+        <!-- 로그아웃 상태일 때 -->
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
-          {% endif %}
         </li>
-        <li>
-          {% if user.is_authenticated %}
-          <a class="nav-link" href="{% url 'mypage:mypage' user.username %}"
-            >마이페이지</a
-          >
-          {% endif %}
-        </li>
-        <li>
-          {% if not user.is_authenticated %}
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'common:signup' %}">회원가입</a>
-          {% endif %}
         </li>
+        {% endif %}
       </ul>
     </div>
   </div>
