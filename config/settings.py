@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "movies",
 ]
 
 MIDDLEWARE = [
@@ -78,11 +77,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "moviedb",  # 데이터베이스  이름
+        "NAME": "pybo",  # 데이터베이스  이름
         "USER": "root",  # 사용자  이름
-        "PASSWORD": "dpfqkfkrl",  # 비밀번호
+        "PASSWORD": "0000",  # 비밀번호
         "HOST": "127.0.0.1",  # 데이테베이스  호스트명  (동일  기기면 localhost)
-        "PORT": "3306",  # 데이터베이스  포트번호  (기본  3306)
+        "PORT": "3307",  # 데이터베이스  포트번호  (기본  3306)
         "CHARSET": "utf8mb4",  # 4바이트  UTF-8
     }
 }
