@@ -12,7 +12,12 @@ def index(request):
     movie_list = Movie.objects.all()
     # answer_list = Answer.objects.all()
     context = {"movie_list": movie_list}
-    return render(request, "mypage\movie_listl.html", context)
+    return render(request, "mypage/movie_list.html", context)
+
+
+# def index(request):
+#     movie_list = Movie.objects.all().order_by('-create_date')
+#     return render(request, 'mypage/movie_list.html', {'movie_list': movie_list})
 
 
 def mypage(request, username):
