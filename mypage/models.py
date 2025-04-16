@@ -11,13 +11,9 @@ class Movie(models.Model):
     rating = models.DecimalField("별점", max_digits=3, decimal_places=1)
     description = models.TextField("내용")
     create_date = models.DateTimeField("등록일", auto_now_add=True)
-    movieCd = models.CharField("영화 코드", max_length=100, default="UNKNOWN")
 
     def __str__(self):
         return self.title
-   
-    class Meta:
-        db_table = 'mypage_movie'  # 테이블 이름 지정
 
 
 class Review(models.Model):
@@ -28,5 +24,4 @@ class Review(models.Model):
     created_at = models.DateTimeField("작성일", auto_now_add=True)
 
     def __str__(self):
-        return f"[{self.ovie.title}] {self.author}님의 리뷰"
-
+        return f"[{self.movie.title}] {self.author}님의 리뷰"
