@@ -13,7 +13,7 @@ def index(request):
     movie_list = Movie.objects.all()
     # answer_list = Answer.objects.all()
     context = {"movie_list": movie_list}
-    return render(request, "mypage\movie_listl.html", context)
+    return render(request, "mypage/movie_listl.html", context)
 
 
 @login_required(login_url=reverse_lazy("common:login"))
