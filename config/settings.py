@@ -104,6 +104,7 @@ DATABASES = {
 #         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
 #     },
 # ]
+# 비밀번호 임시로 4자리로만 제한 더 복잡한 비밀번호 필요시 위 주석처리로 바꿔주세요
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",

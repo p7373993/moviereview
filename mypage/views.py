@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from mypage.forms import ReviewForm
 from mypage.models import Movie, Review
 from django.utils import timezone
@@ -15,14 +16,20 @@ def index(request):
     return render(request, "mypage\movie_listl.html", context)
 
 
+@login_required(login_url=reverse_lazy("common:login"))
 def mypage(request, username):
     # print(username)
+    if request.user.username != username:
+        return redirect("/")  # 권한 없음
     review_list = Review.objects.filter(author=username)
     context = {"review_list": review_list}
     return render(request, "mypage/my_review_list.html", context)
 
 
+@login_required(login_url=reverse_lazy("common:login"))
 def review_edit(request, username, review_id):
+    if request.user.username != username:
+        return redirect("/")  # 권한 없음
     review = get_object_or_404(Review, id=review_id)
 
     if request.method == "POST":
@@ -43,8 +50,37 @@ def review_edit(request, username, review_id):
     )
 
 
+@login_required(login_url=reverse_lazy("common:login"))
 def review_delete(request, username, review_id):
+    if request.user.username != username:
+        return redirect("/")  # 권한 없음
     review = get_object_or_404(Review, id=review_id)
     if request.method == "POST":
         review.delete()
         return redirect("mypage:mypage", username=username)
+
+
+def review_create(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    # 🔒 로그인 체크
+    if not request.user.is_authenticated:
+        form = ReviewForm()
+        return redirect("common:login")
+    if request.method == "POST":
+
+        form = ReviewForm(request.POST)  # 🔥 기존 리뷰에 덮어쓰기
+        if form.is_valid():
+            rForm = form.save(commit=False)
+            rForm.created_at = timezone.now()  # 필요 시 수정 시간 업데이트
+            rForm.author = request.user
+            rForm.movie = movie
+            rForm.save()
+            return redirect("mypage:review_create", movie_id=movie_id)
+    else:
+        # movie
+        form = ReviewForm()
+        return render(
+            request,
+            "mypage/movie_detail.html",
+            {"movie": movie, "form": form},
+        )

@@ -1,39 +1,54 @@
 {% extends "base.html" %} {% block content %}
-<div class="container my-5">
+<div class="container my-5" style="max-width: 1140px">
   <h2 class="mb-4">영화 목록</h2>
 
-  <table class="table table-hover table-bordered table-striped">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">번호</th>
-        <th scope="col">영화 제목</th>
-        <th scope="col">작성일</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% if movie_list %} {% for movie in movie_list %}
-      <tr>
-        <td>{{ movie.id }}</td>
-        <td>
-          {% comment %}
+  {% if movie_list %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for movie in movie_list %}
+    <div class="col">
+      <div class="card shadow-sm h-100" style="min-height: 440px">
+        <!-- 영화 포스터 -->
+        {% if movie.poster %}
+        <img
+          src="{{ movie.poster }}"
+          class="card-img-top"
+          alt="{{ movie.title }} 포스터"
+          style="height: 440px; object-fit: contain; background-color: #f8f9fa"
+        />
+        {% else %}
+        <div
+          class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
+          style="height: 440px"
+        >
+          <span class="text-white">포스터 없음</span>
+        </div>
+        {% endif %}
+
+        <!-- 카드 본문 -->
+        <div class="card-body d-flex flex-column justify-content-between">
+          <h5 class="card-title">{{ movie.title }}</h5>
+          <p class="card-text">
+            <strong>개봉일:</strong> {{ movie.release_date|date:"Y년 m월 d일" }}
+          </p>
+        </div>
+
+        <!-- 카드 푸터 -->
+        <div class="card-footer bg-white border-0">
           <a
-            href="{% url 'movie_detail' movie.id %}"
-            class="text-decoration-none text-primary"
+            href="{% url 'mypage:review_create' movie.id %}"
+            class="btn btn-primary w-100"
           >
-            {{ movie.title }}
+            리뷰 작성하기
           </a>
-          {% endcomment %} {{movie.title}}
-        </td>
-        <td>{{ movie.create_date|date:"Y년 m월 d일 H:i" }}</td>
-      </tr>
-      {% endfor %} {% else %}
-      <tr>
-        <td colspan="3" class="text-center text-muted">
-          리스트에 영화가 없습니다.
-        </td>
-      </tr>
-      {% endif %}
-    </tbody>
-  </table>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info text-center" role="alert">
+    리스트에 영화가 없습니다.
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

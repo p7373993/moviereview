@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block content %} {% comment %} 포스터 감도 장르
+개봉일 리뷰들 {% endcomment %}
+<div class="container my-5">
+  <!-- 영화 정보 -->
+  <div class="card shadow-sm mb-5">
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if movie.poster %}
+        <img
+          src="{{ movie.poster }}"
+          alt="{{ movie.title }} 포스터"
+          class="img-fluid rounded-start"
+          style="object-fit: cover; height: 100%"
+        />
+        {% else %}
+        <div
+          class="d-flex align-items-center justify-content-center h-100 bg-light text-muted"
+        >
+          포스터 없음
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title mb-3">{{ movie.title }}</h2>
+          <p class="card-text"><strong>감독:</strong> {{ movie.director }}</p>
+          <p class="card-text"><strong>장르:</strong> {{ movie.genre }}</p>
+          <p class="card-text">
+            <strong>개봉일:</strong> {{ movie.release_date|date:"Y년 m월 d일" }}
+          </p>
+          <p class="card-text">
+            <strong>별점:</strong>
+            <span class="badge bg-warning text-dark"
+              >{{ movie.rating }} / 5.0</span
+            >
+          </p>
+          <p class="card-text">
+            <strong>내용:</strong> {{ movie.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} 리뷰 {% endcomment %}
+  <h5 class="border-bottom my-3 py-2">
+    {{movie.reviews.count}}개의 리뷰가 있습니다.
+  </h5>
+  {% for review in movie.reviews.all %}
+  <div class="card my-3">
+    <!-- 작성자 정보 -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <strong
+          class="text-primary"
+          style="font-size: 1.5rem; font-weight: bold; margin-right: 15px"
+        >
+          {{ review.author }}
+        </strong>
+      </div>
+      <div class="badge bg-light text-dark p-2">
+        {{ review.created_at|date:"Y년 m월 d일 H:i" }}
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- 리뷰 내용 -->
+      <div class="card-text" style="white-space: pre-line">
+        {{ review.content }}
+      </div>
+
+      <!-- 별점 -->
+      <div class="d-flex justify-content-start align-items-center mt-2">
+        <span class="badge bg-warning text-dark">
+          ⭐ {{ review.score }} / 5.0
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+
+  <!-- 리뷰 작성 폼 -->
+  <div class="card shadow-sm p-4">
+    <h3 class="mb-4">리뷰 작성</h3>
+    <form method="POST" action="{% url 'mypage:review_create' movie.id %}">
+      {% csrf_token %} {% include "form_errors.html" %}
+      <div class="mb-3">
+        <label for="content" class="form-label fw-bold">리뷰 내용</label>
+        <textarea
+          class="form-control"
+          id="content"
+          name="content"
+          rows="5"
+          placeholder="영화에 대한 당신의 생각을 공유하세요!"
+          required
+        >
+{{ form.content.value|default_if_none:"" }}</textarea
+        >
+      </div>
+      <div class="mb-3">
+        <label for="rating" class="form-label fw-bold">평점 (0.0 ~ 5.0)</label>
+        <input
+          type="number"
+          step="0.1"
+          min="0"
+          max="5"
+          class="form-control"
+          id="rating"
+          name="score"
+          placeholder="예: 4.5"
+          required
+          value="{{ form.score.value|default:'0' }}"
+        />
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary btn-lg">리뷰 제출</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
