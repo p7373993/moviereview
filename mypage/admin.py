@@ -1,3 +1,5 @@
+#mypage/admin.py
+
 from django.contrib import admin
 
 from mypage.models import Movie, Review
