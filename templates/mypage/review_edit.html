@@ -55,124 +55,155 @@
 <div class="container my-5">
   <div class="card shadow-sm rounded p-4">
     <h3 class="mb-4 text-center">🎬 리뷰 수정</h3>
-    <form
-      method="post"
-      action="{% url 'mypage:review_edit' user.username review_id %}"
-    >
-      {% csrf_token %} {% include "form_errors.html" %}
-
-      <!-- 영화 제목 -->
-      <div class="mb-4">
-        <label for="subject" class="form-label fw-bold">영화 제목</label>
-        <div id="subject" class="form-control bg-light">{{ subject }}</div>
-      </div>
-
-      <!-- 리뷰 내용 -->
-      <div class="mb-4">
-        <label for="content" class="form-label fw-bold">리뷰 내용</label>
-        <textarea
-          name="content"
-          id="content"
-          class="form-control"
-          rows="8"
-          placeholder="리뷰를 작성해주세요."
-        >
-{{ form.content.value|default_if_none:"" }}</textarea
-        >
-      </div>
-
-      <!-- 별점 UI -->
-      <div class="mb-4">
-        <label class="form-label fw-bold">평점</label>
-        <div class="star-rating" style="display: flex; gap: 8px">
-          {% for i in "12345" %}
-          <label class="star" data-value="{{ i }}">&#9733;</label>
-          {% endfor %}
-        </div>
-        <input
-          type="hidden"
-          name="score"
-          id="id_score"
-          value="{{ form.score.value|default:'0' }}"
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if movie.poster %}
+        <img
+          src="{{ movie.poster }}"
+          alt="{{ movie.title }} 포스터"
+          class="img-fluid rounded-start"
+          style="object-fit: cover; height: 100%"
         />
+        {% else %}
+        <div
+          class="d-flex align-items-center justify-content-center h-100 bg-light text-muted"
+        >
+          포스터 없음
+        </div>
+        {% endif %}
       </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title mb-3">{{ movie.title }}</h2>
+          <p class="card-text"><strong>감독:</strong> {{ movie.director }}</p>
+          <p class="card-text"><strong>장르:</strong> {{ movie.genre }}</p>
+          <p class="card-text">
+            <strong>개봉일:</strong> {{ movie.release_date|date:"Y년 m월 d일" }}
+          </p>
+          <p class="card-text">
+            <strong>별점:</strong>
+            <span class="badge bg-warning text-dark"
+              >{{ movie.rating }} / 5.0</span
+            >
+          </p>
+          <p class="card-text">
+            <strong>내용:</strong> {{ movie.description }}
+          </p>
+        </div>
+      </div>
+      <form
+        method="post"
+        action="{% url 'mypage:review_edit' user.username review_id %}"
+      >
+        {% csrf_token %} {% include "form_errors.html" %}
 
-      <!-- 버튼 -->
-      <div class="d-grid">
-        <button type="submit" class="btn btn-primary btn-lg">
-          💾 저장하기
-        </button>
-      </div>
-    </form>
+        <!-- 리뷰 내용 -->
+        <div class="mb-4">
+          <label for="content" class="form-label fw-bold">리뷰 내용</label>
+          <textarea
+            name="content"
+            id="content"
+            class="form-control"
+            rows="8"
+            placeholder="리뷰를 작성해주세요."
+          >
+{{ form.content.value|default_if_none:"" }}</textarea
+          >
+        </div>
+
+        <!-- 별점 UI -->
+        <div class="mb-4">
+          <label class="form-label fw-bold">평점</label>
+          <div class="star-rating" style="display: flex; gap: 8px">
+            {% for i in "12345" %}
+            <label class="star" data-value="{{ i }}">&#9733;</label>
+            {% endfor %}
+          </div>
+          <input
+            type="hidden"
+            name="score"
+            id="id_score"
+            value="{{ form.score.value|default:'0' }}"
+          />
+        </div>
+
+        <!-- 버튼 -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary btn-lg">
+            💾 저장하기
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- 스타일 -->
-<style>
-  .star-rating {
-    display: flex;
-    gap: 8px;
-  }
-
-  .star {
-    font-size: 2rem;
-    cursor: pointer;
-    color: lightgray;
-    transition: color 0.2s;
-  }
-
-  .star.selected,
-  .star.hovered {
-    color: gold;
-  }
-</style>
-
-<!-- 스크립트 -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const stars = document.querySelectorAll(".star-rating .star");
-    const hiddenInput = document.getElementById("id_score");
-
-    // ⭐️ 현재 저장된 값 가져오기
-    let currentValue = parseInt(hiddenInput.value);
-
-    // 별 상태 업데이트 함수
-    function updateStars(value, className) {
-      stars.forEach((s) => {
-        s.classList.remove(className);
-        if (parseInt(s.dataset.value) <= value) {
-          s.classList.add(className);
-        }
-      });
+  <!-- 스타일 -->
+  <style>
+    .star-rating {
+      display: flex;
+      gap: 8px;
     }
 
-    // ⭐️ 초기 점수 반영
-    if (!isNaN(currentValue) && currentValue > 0) {
-      updateStars(currentValue, "selected");
+    .star {
+      font-size: 2rem;
+      cursor: pointer;
+      color: lightgray;
+      transition: color 0.2s;
     }
 
-    // ⭐️ 클릭 이벤트
-    stars.forEach((star) => {
-      star.addEventListener("click", () => {
-        const value = parseInt(star.dataset.value);
-        hiddenInput.value = value;
-        currentValue = value;
-        updateStars(value, "selected");
-      });
+    .star.selected,
+    .star.hovered {
+      color: gold;
+    }
+  </style>
 
-      // 마우스 올리면 hover 표시
-      star.addEventListener("mouseenter", () => {
-        const value = parseInt(star.dataset.value);
-        updateStars(value, "hovered");
-      });
+  <!-- 스크립트 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const stars = document.querySelectorAll(".star-rating .star");
+      const hiddenInput = document.getElementById("id_score");
 
-      // 마우스 나가면 hover 제거
-      star.addEventListener("mouseleave", () => {
-        updateStars(currentValue, "selected"); // hover 지우고 기존 값 유지
-        stars.forEach((s) => s.classList.remove("hovered"));
+      // ⭐️ 현재 저장된 값 가져오기
+      let currentValue = parseInt(hiddenInput.value);
+
+      // 별 상태 업데이트 함수
+      function updateStars(value, className) {
+        stars.forEach((s) => {
+          s.classList.remove(className);
+          if (parseInt(s.dataset.value) <= value) {
+            s.classList.add(className);
+          }
+        });
+      }
+
+      // ⭐️ 초기 점수 반영
+      if (!isNaN(currentValue) && currentValue > 0) {
+        updateStars(currentValue, "selected");
+      }
+
+      // ⭐️ 클릭 이벤트
+      stars.forEach((star) => {
+        star.addEventListener("click", () => {
+          const value = parseInt(star.dataset.value);
+          hiddenInput.value = value;
+          currentValue = value;
+          updateStars(value, "selected");
+        });
+
+        // 마우스 올리면 hover 표시
+        star.addEventListener("mouseenter", () => {
+          const value = parseInt(star.dataset.value);
+          updateStars(value, "hovered");
+        });
+
+        // 마우스 나가면 hover 제거
+        star.addEventListener("mouseleave", () => {
+          updateStars(currentValue, "selected"); // hover 지우고 기존 값 유지
+          stars.forEach((s) => s.classList.remove("hovered"));
+        });
       });
     });
-  });
-</script>
+  </script>
 
-{% endblock %}
+  {% endblock %}
+</div>

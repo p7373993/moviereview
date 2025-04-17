@@ -30,6 +30,7 @@ def mypage(request, username):
 def review_edit(request, username, review_id):
     if request.user.username != username:
         return redirect("/")  # 권한 없음
+
     review = get_object_or_404(Review, id=review_id)
 
     if request.method == "POST":
@@ -41,12 +42,12 @@ def review_edit(request, username, review_id):
             return redirect("mypage:mypage", username=username)
     else:
         form = ReviewForm(instance=review)  # 🔥 기존 내용 불러오기
-        subject = review.movie.title
+        movie = review.movie
 
     return render(
         request,
         "mypage/review_edit.html",
-        {"form": form, "subject": review.movie.title, "review_id": review_id},
+        {"form": form, "movie": movie, "review_id": review_id},
     )
 
 
