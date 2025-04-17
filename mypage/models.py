@@ -25,3 +25,20 @@ class Review(models.Model):
 
     def __str__(self):
         return f"[{self.movie.title}] {self.author}님의 리뷰"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.update_movie_rating()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.update_movie_rating()
+
+    def update_movie_rating(self):
+        reviews = self.movie.reviews.all()
+        if reviews.exists():
+            avg = reviews.aggregate(models.Avg("score"))["score__avg"]
+            self.movie.rating = round(avg, 1)
+        else:
+            self.movie.rating = 0
+        self.movie.save()
