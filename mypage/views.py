@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from mypage.forms import ReviewForm
-from mypage.models import Movie, Review
+from mypage.models import Review
+from movies.models import Movie
 from django.utils import timezone
 
 # Create your views here.
