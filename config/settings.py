@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-dh#u^4d#@t4wc$2vjbhabzpxskqzbc!k8ogzydj(elf##(5^1+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -74,18 +74,28 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "pybo",  # 데이터베이스  이름
+#         "USER": "root",  # 사용자  이름
+#         "PASSWORD": "0000",  # 비밀번호
+#         "HOST": "127.0.0.1",  # 데이테베이스  호스트명  (동일  기기면 localhost)
+#         "PORT": "3307",  # 데이터베이스  포트번호  (기본  3306)
+#         "CHARSET": "utf8mb4",  # 4바이트  UTF-8
+#     }
+# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "pybo",  # 데이터베이스  이름
-        "USER": "root",  # 사용자  이름
+        "NAME": "pybo",  # 데이터베이스 이름
+        "USER": "user",  # 사용자 이름 (root가 아니라 user로 변경)
         "PASSWORD": "0000",  # 비밀번호
-        "HOST": "127.0.0.1",  # 데이테베이스  호스트명  (동일  기기면 localhost)
-        "PORT": "3307",  # 데이터베이스  포트번호  (기본  3306)
-        "CHARSET": "utf8mb4",  # 4바이트  UTF-8
+        "HOST": "172.18.50.79",  # WSL IP 주소
+        "PORT": "3306",  # 데이터베이스 포트번호 (3307)
+        "CHARSET": "utf8mb4",  # 4바이트 UTF-8
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
