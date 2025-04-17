@@ -89,9 +89,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "pybo",  # 데이터베이스 이름
-        "USER": "user",  # 사용자 이름 (root가 아니라 user로 변경)
+        "USER": "root",  # 사용자 이름 (root가 아니라 user로 변경)
         "PASSWORD": "0000",  # 비밀번호
-        "HOST": "172.18.50.79",  # WSL IP 주소
+        "HOST": "127.0.0.1",  # WSL IP 주소
         "PORT": "3306",  # 데이터베이스 포트번호 (3307)
         "CHARSET": "utf8mb4",  # 4바이트 UTF-8
     }
