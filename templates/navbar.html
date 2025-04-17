@@ -1,10 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 shadow-lg">
   <div class="container">
     <!-- 로고 / 홈 -->
-    <a
-      class="navbar-brand fw-bold text-primary"
-      href="{% url 'mypage:index' %}"
-    >
+    <a class="navbar-brand fw-bold fs-3 text-danger" href="{% url 'mypage:index' %}">
       🎬 Watcha
     </a>
 
@@ -23,27 +20,26 @@
 
     <!-- 메뉴 목록 -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center gap-3">
         {% if user.is_authenticated %}
-        <!-- 로그인 상태일 때 -->
+        <!-- 로그인 상태 -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'mypage:mypage' user.username %}">
+          <a class="nav-link text-white fw-semibold" href="{% url 'mypage:mypage' user.username %}">
             마이페이지
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-danger" href="{% url 'common:logout' %}">
+          <a class="nav-link text-danger fw-semibold" href="{% url 'common:logout' %}">
             {{ user.username }} (로그아웃)
           </a>
         </li>
-
         {% else %}
-        <!-- 로그아웃 상태일 때 -->
+        <!-- 로그아웃 상태 -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
+          <a class="nav-link text-white fw-semibold" href="{% url 'common:login' %}">로그인</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'common:signup' %}">회원가입</a>
+          <a class="nav-link text-white fw-semibold" href="{% url 'common:signup' %}">회원가입</a>
         </li>
         {% endif %}
       </ul>

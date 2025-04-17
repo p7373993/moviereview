@@ -1,25 +1,112 @@
-{% extends "base.html" %} {% block content %}
-<div class="container my-5" style="max-width: 1140px">
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .video-hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  iframe {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 영상 위에서 마우스 이벤트가 발생하지 않게 함 */
+  }
+
+  .overlay {
+    opacity: 0.5; /* 기본 오버레이 투명도 */
+    transition: opacity 0.4s;
+  }
+
+  .content {
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .video-hero:hover .overlay {
+    opacity: 0.7; /* 마우스를 올렸을 때 오버레이가 더 진해짐 */
+  }
+
+  .video-hero:hover .content {
+    opacity: 1; /* 마우스를 올렸을 때 텍스트가 보임 */
+  }
+
+  .movie-list-container {
+    max-width: 1140px;
+    margin-top: 50px;
+  }
+
+  .movie-list-container h2 {
+    color: white;
+    font-weight: bold;
+  }
+
+  .movie-card {
+    min-height: 440px;
+  }
+
+  .movie-poster {
+    height: 440px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+  }
+
+  .no-poster {
+    height: 400px;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .no-poster span {
+    color: white;
+  }
+</style>
+
+<div class="position-relative vh-100 overflow-hidden video-hero">
+  <!-- YouTube 배경 영상 -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 z-0">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?list=PLwQm9_O-zm8bCqsqv1itJgUXrc8tITmYe&autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <!-- 어두운 오버레이 (마우스를 올렸을 때만 진해짐) -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark z-1 overlay"></div>
+
+  <!-- 텍스트 콘텐츠 (마우스를 올렸을 때만 보임) -->
+  <div class="position-relative z-2 text-center text-white d-flex flex-column justify-content-center align-items-center h-100 px-3 content">
+    <h1 class="display-3 fw-bold mb-4">영화의 감동을<br />느껴보세요</h1>
+    <p class="fs-4 mb-4">오직 왓챠에서만</p>
+    <a href="#movie-list" class="btn btn-danger btn-lg px-5 py-3 fw-semibold">
+      현재 상영 중인 영화
+    </a>
+  </div>
+</div>
+
+<div id="movie-list" class="movie-list-container">
   <h2 class="mb-4">영화 목록</h2>
 
   {% if movie_list %}
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for movie in movie_list %}
     <div class="col">
-      <div class="card shadow-sm h-100" style="min-height: 440px">
+      <div class="card shadow-sm h-100 movie-card">
         <!-- 영화 포스터 -->
         {% if movie.poster %}
         <img
           src="{{ movie.poster }}"
-          class="card-img-top"
+          class="card-img-top movie-poster shadow"
           alt="{{ movie.title }} 포스터"
-          style="height: 440px; object-fit: contain; background-color: #f8f9fa"
         />
         {% else %}
-        <div
-          class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
-          style="height: 440px"
-        >
+        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center no-poster">
           <span class="text-white">포스터 없음</span>
         </div>
         {% endif %}
@@ -36,7 +123,7 @@
         <div class="card-footer bg-white border-0">
           <a
             href="{% url 'mypage:review_create' movie.id %}"
-            class="btn btn-primary w-100"
+            class="btn btn-danger w-100"
           >
             리뷰 작성하기
           </a>
@@ -51,4 +138,5 @@
   </div>
   {% endif %}
 </div>
+
 {% endblock %}

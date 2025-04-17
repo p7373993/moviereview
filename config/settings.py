@@ -94,6 +94,7 @@ DATABASES = {
         "HOST": "127.0.0.1",  # WSL IP 주소
         "PORT": "3306",  # 데이터베이스 포트번호 (3307)
         "CHARSET": "utf8mb4",  # 4바이트 UTF-8
+
     }
 }
 
