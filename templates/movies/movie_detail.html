@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4">{{ movie.title }}</h2>
+
+  <div class="row">
+    <div class="col-md-4">
+      {% if movie.poster %}
+        <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="img-fluid rounded">
+      {% else %}
+        <p class="text-muted">포스터 없음</p>
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <ul class="list-group">
+        <li class="list-group-item"><strong>장르:</strong> {{ movie.genre.genre_name }}</li>
+        <li class="list-group-item"><strong>평점:</strong> {{ movie.rating }}</li>
+        <li class="list-group-item"><strong>개봉일:</strong> {{ movie.release_date }}</li>
+        <li class="list-group-item">
+          <strong>출연진:</strong>
+          {% if cast_list %}
+            <ul class="mb-0 mt-2">
+              {% for cast in cast_list %}
+                <li>{{ cast.cast_name }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted mb-0">출연진 정보 없음</p>
+          {% endif %}
+        </li>
+      </ul>
+      <a href="{% url 'movie_index' %}" class="btn btn-secondary mt-3">← 목록으로</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

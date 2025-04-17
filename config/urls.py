@@ -26,4 +26,6 @@ urlpatterns = [
     path("common/", include("common.urls")),
     path("mypage/", include("mypage.urls")),
     path("", views.index, name="index"),
+    path('', include('movies.urls')),  # ← 이 줄 꼭 있어야 해!
+
 ]
