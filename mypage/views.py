@@ -43,6 +43,7 @@ def review_edit(request, username, review_id):
     else:
         form = ReviewForm(instance=review)  # 🔥 기존 내용 불러오기
         movie = review.movie
+        print("debug")
 
     return render(
         request,
